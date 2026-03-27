@@ -61,15 +61,20 @@ def main():
         print_map(map, player["pos"])
         key = get_key()
         if key == "up":
-            player["pos"] = (max(player["pos"][0] - 1, 0), player["pos"][1])
+            new_pos = (max(player["pos"][0] - 1, 0), player["pos"][1])
         elif key == "down":
-            player["pos"] = (min(player["pos"][0] + 1, MAP_HEIGHT - 1), player["pos"][1])
+            new_pos = (min(player["pos"][0] + 1, MAP_HEIGHT - 1), player["pos"][1])
         elif key == "left":
-            player["pos"] = (player["pos"][0], max(player["pos"][1] - 1, 0))
+            new_pos = (player["pos"][0], max(player["pos"][1] - 1, 0))
         elif key == "right":
-            player["pos"] = (player["pos"][0], min(player["pos"][1] + 1, MAP_WIDTH - 1))
+            new_pos = (player["pos"][0], min(player["pos"][1] + 1, MAP_WIDTH - 1))
         elif key == "esc":
             break
+        else:
+            continue
+
+        if map[new_pos[0]][new_pos[1]]["type"] != "mountain":
+            player["pos"] = new_pos
 
 def generate_map(x: int, y: int, player_pos: tuple, num_coins):
     map = []
