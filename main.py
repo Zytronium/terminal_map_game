@@ -53,12 +53,6 @@ def main():
 def generate_map(x: int, y: int, player_pos: tuple, num_coins):
     map = []
 
-    for i in range(x):
-        row = []
-        for i in range(y):
-            row.append(None)
-        map.append(row)
-
     def set_terrain(x, y, tile):
         map[x][y] = tile.copy()
 
@@ -68,14 +62,16 @@ def generate_map(x: int, y: int, player_pos: tuple, num_coins):
     def set_item_color(x, y, color):
         map[x][y]["item_color"] = color
 
-    # Capture content for display
-    # content_buffer = StringIO()
-    # old_stdout = sys.stdout
-    # sys.stdout = content_buffer
+    # Create map structure so it can be filled without error
+    for i in range(x):
+        row = []
+        for i in range(y):
+            row.append(None)
+        map.append(row)
 
     coins = []
 
-    # generate and print a random map
+    # generate and save a random map
     for i in range(x):
         for j in range(y):
             item_icon = " "
@@ -111,6 +107,7 @@ def generate_map(x: int, y: int, player_pos: tuple, num_coins):
             set_item_color(i, j, icon_color)
             # end loop
         # end loop
+
     # Add coins
     # NOTE: If we add more items in the future, we will need to ensure that coins can't overwrite other items. We are safe for now since coins and volcanoes cannot spawn on the same tile types.
     for i in range(num_coins):
@@ -124,11 +121,6 @@ def generate_map(x: int, y: int, player_pos: tuple, num_coins):
 
     return map
 
-    # content = content_buffer.getvalue()
-    # sys.stdout = old_stdout
-    #
-    # return content
-
 
 def print_map(map):
     for row in map:
@@ -138,10 +130,14 @@ def print_map(map):
 
             # set terrain color
             set_background_color(terrain_color)
+
             # set icon color
             set_color(tile["item_color"])
+
             # print tile with terrain color and item icon
             print(item_icon if item_icon != " " else "  ", end="") # 2 spaces if no icon, else no spaces because emojis are 2 characters in length
+
+            # Reset background and foreground colors
             reset_color()
         print()
 
