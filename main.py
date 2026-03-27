@@ -47,7 +47,7 @@ items = [
 ]
 
 player = {
-    "pos": (14, 7),
+    "pos": (14, 12),
     "coins": 0,
 }
 
