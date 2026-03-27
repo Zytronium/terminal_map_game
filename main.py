@@ -73,8 +73,14 @@ def main():
         else:
             continue
 
+        # Move to new position if it's not a mountain tile
         if map[new_pos[0]][new_pos[1]]["type"] != "mountain":
             player["pos"] = new_pos
+
+            # Also collect coin if it was there
+            if map[new_pos[0]][new_pos[1]]["item"] == items[0]["icon"]:
+                player["coins"] += 1
+                map[new_pos[0]][new_pos[1]]["item"] = " "
 
 def generate_map(x: int, y: int, player_pos: tuple, num_coins):
     map = []
