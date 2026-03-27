@@ -69,6 +69,7 @@ def generate_map(x: int, y: int, player_pos: tuple, num_coins):
             if (i, j) == player_pos:
                 player_here = True
                 item_icon = "⭐"
+            coin_here = (i, j) in coins
 
             tile_pool = []
 
@@ -78,13 +79,13 @@ def generate_map(x: int, y: int, player_pos: tuple, num_coins):
                     tile_pool.append(t)
             tile = tile_pool[random.randint(0, len(tile_pool) - 1)]
 
-            # If player starts here, don't generate mountain here
-            while player_here and tile["type"] == "mountain":
+            # If player starts here, don't generate mountain here | If a coin is here, don't generate terrain it can't be on
+            while (player_here and tile["type"] == "mountain") or (coin_here and tile["type"] not in items[0]["spawns_on"]):
                 tile = tile_pool[random.randint(0, len(tile_pool) - 1)]
 
             color = tile["color"]
             if not player_here:
-                if len(coins) < num_coins and tile["type"] in items[0]["spawns_on"] and random.randint(0, 100) <= 10:
+                if coin_here:
                     set_color(items[0]["color"])
                     item_icon = items[0]["icon"]
                     coins.append((i, j))
