@@ -1,7 +1,5 @@
+#!/usr/bin/env python3
 import random
-import sys
-from io import StringIO
-
 from colors import set_background_color, reset_color, set_color
 
 tiles = [
@@ -45,10 +43,15 @@ items = [
     }
 ]
 
-def main():
-    map = generate_map(16, 16, (15, 8), 12)
+player = {
+    "pos": (14, 7),
+    "coins": 0,
+}
 
-    print_map(map)
+def main():
+    map = generate_map(15, 15, player["pos"], 10)
+
+    print_map(map, player["pos"])
 
 def generate_map(x: int, y: int, player_pos: tuple, num_coins):
     map = []
@@ -79,7 +82,6 @@ def generate_map(x: int, y: int, player_pos: tuple, num_coins):
             player_here = False
             if (i, j) == player_pos:
                 player_here = True
-                item_icon = "⭐"
 
             tile_pool = []
 
@@ -122,9 +124,13 @@ def generate_map(x: int, y: int, player_pos: tuple, num_coins):
     return map
 
 
-def print_map(map):
+def print_map(map, player_pos):
+    i = -1
+    j = -1
     for row in map:
+        i += 1
         for tile in row:
+            j += 1
             terrain_color = tile["color"]
             item_icon = tile["item"]
 
@@ -134,12 +140,17 @@ def print_map(map):
             # set icon color
             set_color(tile["item_color"])
 
+            # print player
+            if (i, j) == player_pos:
+                item_icon = "⭐"
+
             # print tile with terrain color and item icon
             print(item_icon if item_icon != " " else "  ", end="") # 2 spaces if no icon, else no spaces because emojis are 2 characters in length
 
             # Reset background and foreground colors
             reset_color()
         print()
+        j = -1
 
 
 if __name__ == "__main__":
